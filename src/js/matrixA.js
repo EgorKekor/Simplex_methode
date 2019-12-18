@@ -5,6 +5,7 @@ export class MatrixA {
         this.size = size;
         this.currentStrings = 0;
         this.matrix = new Array;
+        this.basis = new Array;
     }
 
     pushString = (array, sign = "<=") => {
@@ -28,14 +29,15 @@ export class MatrixA {
         }
 
         this.currentStrings -= - 1;
-
         this.matrix.push(array);
+
+        if (this.currentStrings === this.size) {
+            this.createBasis();
+        }
     }
 
 
-    getBasis = () => {
-        const basis = new Array;
-
+    createBasis = () => {
         for (let col = 0; col < this.size * 2; col++) {
             let replyCounter = 0;
             for (const line of this.matrix) {
@@ -44,10 +46,13 @@ export class MatrixA {
                 }
             }
             if (replyCounter === 1) {
-                basis.push(col);
+                this.basis.push(col);
             }
         }
-        return basis;
+    }
+
+    swapBasis = (row, col) => {
+        this.basis[row] = col;
     }
 
     getColumn = (col) => {
