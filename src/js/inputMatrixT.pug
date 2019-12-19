@@ -1,0 +1,15 @@
+div(class="column-flex")
+    - for(let row = 0; row < matrixOptions.rows; row++) {
+        div(class="row-flex")
+            - let col = 0;
+            - for(col = 0; col < matrixOptions.cols; col++) {
+                div(class="flex-elem")
+                    input(type="text" class="flex-elem-input" value=2 id=""+row+col)
+            -}
+            div(class="flex-elem")
+                select(type="select" class="flex-elem-input")
+                    option() >=
+                    option() <=
+            div(class="flex-elem")
+                input(type="text" class="flex-elem-input" value=2 id=""+row+col)
+    -}

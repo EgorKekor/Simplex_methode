@@ -1,10 +1,13 @@
 import { DomEventsWrapperMixin } from "./DomEventsWrapperMixin.js";
+import Bus from "./Bus.js"
+import { SOLVE_AGAIN } from "./events.js"
 
 
 export class InputSliderC {
     constructor(sliceWidth, scale) {
         Object.assign(this, DomEventsWrapperMixin);
         this.registerClassHandler(".slyder-head", "mousedown", this._mouseDown);
+        this.registerClassHandler(".body-input", "change", this._scaleApply);
         this.enableAll();
         this.scale = scale;
         this.sliceWidth = sliceWidth;
@@ -21,7 +24,7 @@ export class InputSliderC {
         this.activeHead.style.left = event.pageX - this.activeHead.offsetWidth / 2 + 'px';
         this.activeBody.style.width = this.activeHead.style.left;
 
-        this.activeBody.value = (this.activeBody.style.width.replace(/[px]/g, "")/this.sliceWidth) * this.scale; 
+        this.activeBody.firstChild.value = (this.activeBody.style.width.replace(/[px]/g, "")/this.sliceWidth) * this.scale; 
     }
 
     _mouseDown = (event) => {
@@ -42,6 +45,7 @@ export class InputSliderC {
         document.onmouseup = (event) => {
             document.removeEventListener('mousemove', this._onMouseMove);
             document.onmouseup = null;
+            this.activeHead.style.zIndex = 0;
             this._scaleApply();
         };
     }
@@ -54,8 +58,8 @@ export class InputSliderC {
 
         const maxValue = Array.from(allBodyes).reduce(
             (previousValue, currentItem) => {
-                if (Number(currentItem.value) > previousValue) {
-                    return Number(currentItem.value);
+                if (Number(currentItem.firstChild.value) > previousValue) {
+                    return Number(currentItem.firstChild.value);
                 }
                 return previousValue;
             },
@@ -74,14 +78,15 @@ export class InputSliderC {
         }
 
         for (const [key, value] of sliceMap) {
-            const currentValue = Number(value[1].value);
+            const currentValue = Number(value[1].firstChild.value);
             const prop = currentValue / maxValue;
             value[1].style.width = (this.sliceWidth * prop) + "px";
             value[0].style.left = value[1].style.width;
             this.scale = maxValue 
         }
 
-        console.log(sliceMap);
+        Bus.emit(SOLVE_AGAIN);
+
     }
 }
 

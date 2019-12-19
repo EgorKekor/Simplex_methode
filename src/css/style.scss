@@ -1,2 +1,17 @@
-
 @import "slider/slider";
+@import "form/form";
+
+:root {
+    --color-bg-dark: rgb(23, 21, 32);
+    --color-bg-light: rgba(38, 35, 53, 1);
+    --main-light-color: #c5aee0;
+    --forth-color: #efbcd5;
+
+    --color-success: #72f1b8;
+    --color-danger: #920031;
+}
+
+body {
+    background-color: var(--color-bg-dark);
+    color: var(--main-light-color);
+}
