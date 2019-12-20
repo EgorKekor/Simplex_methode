@@ -41,3 +41,20 @@
     background-color: var(--color-bg-dark);
     color: inherit;
 }
+
+.slyder-plus {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: center;
+    width: 50vw;
+}
+
+.slyder-plus-img {
+    margin-left: 5px;
+    margin-top: 5px;
+    border: solid 2px var(--main-light-color);
+    width: 25px;
+    height: 25px;
+}

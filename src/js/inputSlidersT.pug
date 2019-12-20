@@ -1,5 +1,15 @@
-- for (let i = 0; i < slidersOptions.amount; i++)
-    div(class="slyder-flex")
-        div(class="slyder-body" order=i)
-            input(type="text" class="body-input" value=slidersOptions.scale)
-        div(class="slyder-head" order=i)
+div(id="sliders_amount" amount=slidersOptions.amount)
+    - for (let i = 0; i < slidersOptions.amount; i++)
+        div(class="slyder-flex")
+            div(class="slyder-body" order=i)
+                input(type="text" class="body-input" value=slidersOptions.scale)
+            div(class="slyder-head" order=i)
+div(class="slyder-plus")
+    img(class="slyder-plus-img",
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDTn8ZwXzw9c0bTDor-0JfFPJSZPqLpbvg01GJyZV3jiSG5Aqk6w&s",
+        id="plus",
+        alt="aaa")
+    img(class="slyder-plus-img",
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDtCTEbLmI_DaV26KlPuveaY1qdLX6stYtsY60uwkDmJ8NkuAE&s",
+        id="minus",
+        alt="aaa")

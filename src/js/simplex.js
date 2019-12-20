@@ -167,6 +167,8 @@ export class Simplex {
         console.log(this.matrixA.basis);
         console.log(this.vectorB);
 
+        const result = new Map;
+
         for (let i = 0; i < this.matrixA.size; i++) {
             let pos = 0;
             for (const value of this.matrixA.basis) {
@@ -177,10 +179,13 @@ export class Simplex {
             }
             if (pos === this.matrixA.size) {
                 console.log(`x[${i + 1}]=0`);
+                result.set(i, 0);
             } else {
+                result.set(i, this.vectorB[pos]);
                 console.log(`x[${i + 1}]=${this.vectorB[pos]}`);
             }
         }
+        return result;
     }
 
 }
