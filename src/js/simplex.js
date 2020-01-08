@@ -50,7 +50,7 @@ export class Simplex {
             }
         }
         if (!positive) {
-            console.log("Бесконечное множество решений: все значения столбца отрицательны");
+            alert("Бесконечное множество решений: все значения столбца отрицательны");
             return (-1);
         }
 
@@ -105,7 +105,7 @@ export class Simplex {
             const col = this._getCol(this.indexString);
             const row = this._getRow(col);
             if (row === (-1)) {
-                return;
+                return null;
             }
             console.log(row);
             console.log(col);
@@ -163,6 +163,7 @@ export class Simplex {
             // console.log(this.vectorB);
             // console.log(this.matrixA.matrix);
             // console.log(this.indexString);
+            console.log(this.matrixA.basis);
         }
         console.log(this.matrixA.basis);
         console.log(this.vectorB);

@@ -1,4 +1,7 @@
 div(class="column-flex")
+    select(type="select" class="min-max-switch" id="min_max")
+        option() min
+        option() max
     - for(let row = 0; row < matrixOptions.rows; row++) {
         div(class="row-flex")
             - let col = 0;

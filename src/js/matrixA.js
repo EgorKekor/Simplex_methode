@@ -54,13 +54,21 @@ export class MatrixA {
             }
         }
 
-        const mainDelim = this.matrix[minIndex][this.size - 1];
+        let inputIndex = this.size - 1;
+        for (let i = this.matrix[minIndex].length - 1; i >= 0; i--) {
+            if ((this.matrix[minIndex][i] != 0) && (this.basis[minIndex] !== i)) {
+                inputIndex = i;
+                break;
+            }
+        }
+
+        const mainDelim = this.matrix[minIndex][inputIndex];
 
         vectorB = vectorB.map((item, ind) => {
             if (ind === minIndex) {
                 return (item / mainDelim);
             }
-            return (item - (vectorB[minIndex] * this.matrix[ind][this.size - 1]) / mainDelim)
+            return (item - (vectorB[minIndex] * this.matrix[ind][inputIndex]) / mainDelim)
         });
 
         const copyA = this.matrix.map((item, ind) => {
@@ -72,20 +80,20 @@ export class MatrixA {
                 return line
             }
             for (let col = 0; col < this.size * 2; col++) {
-                line[col] -= (this.matrix[minIndex][col] * this.matrix[ind][this.size - 1]) / mainDelim;
+                line[col] -= (this.matrix[minIndex][col] * this.matrix[ind][inputIndex]) / mainDelim;
             }
             return line
         });
 
         this.matrix = copyA;
-        return vectorB;
+        return [vectorB, inputIndex];
     }
 
     _recountIndexString = (indexString, vectorB) => {
         let pos = 0;
         for (const number of this.basis) {
             if (number < this.size) {
-                const coeff = indexString[pos + 1];
+                const coeff = indexString[number + 1];
                 for (let i = 0; i < this.size * 2; i++) {
                     indexString[i + 1] -= (coeff * this.matrix[pos][i]);
                 }
@@ -121,55 +129,79 @@ export class MatrixA {
                 }
             }
         }
+        
+        // let inputIndex = this.size - 1;
+        // if (this._haveNegative(vectorB)) {
+        //     const ret = this._jordanoGauss(vectorB);
+        //     vectorB = ret[0];
+        //     inputIndex = ret[1];
+        // }
 
-        if (this._haveNegative(vectorB)) {
-            vectorB = this._jordanoGauss(vectorB);
-        }
-
-        let changeColumnStart = this.size - 1;
-        let pos = 0;
-        for (const column of this.basis) {
-            let replyCounter = 0;
-
-            for (let row = 0; row < this.size; row++) {
-                if (this.matrix[row][column] !== 0) {
-                    replyCounter++;
-                }
-            }
-
-            if (replyCounter > 1) {
-                let changeColReply = 0;
-                for (let row = 0; row < this.size; row++) {
-                    if (this.matrix[row][changeColumnStart] !== 0) {
-                        changeColReply++;
-                    }
-                }
-                if (changeColReply === 1) {
-                    this.basis[pos] = changeColumnStart--;
-                }
-            }
-            pos++;
-        }
-
-        // for (let col = this.size * 2 - 1; col >= 0; col--) {
+        // let changeColumnStart = inputIndex;
+        // let pos = 0;
+        // for (const column of this.basis) {
         //     let replyCounter = 0;
-        //     for (let i = 0; i < this.size; i++) {
-        //         if (this.matrix[i][col] !== 0) {
+
+        //     for (let row = 0; row < this.size; row++) {
+        //         if (this.matrix[row][column] !== 0) {
         //             replyCounter++;
         //         }
         //     }
 
-        //     if (replyCounter === 1) {
-
+        //     if (replyCounter > 1) {
+        //         let changeColReply = 0;
+        //         for (let row = 0; row < this.size; row++) {
+        //             if (this.matrix[row][changeColumnStart] !== 0) {
+        //                 changeColReply++;
+        //             }
+        //         }
+        //         if (changeColReply === 1) {
+        //             this.basis[pos] = changeColumnStart--;
+        //         }
         //     }
+        //     pos++;
         // }
-        this._recountIndexString(indexString, vectorB);
+        // this._recountIndexString(indexString, vectorB);
 
-        for (const item of vectorB) {
-            if (item < 0) {
-                console.log("Решения не существует: Вектор В содержит отрицательное значение");
+
+        let protect = 0;
+        while(this._haveNegative(vectorB)) {
+            protect++;
+            if (protect === 100) {
+                console.log("Вектор Б содержит отрицательное значение");
                 return (-1);
             }
+
+            const ret = this._jordanoGauss(vectorB);
+            vectorB = ret[0];
+            const inputIndex = ret[1];
+
+            let changeColumnStart = inputIndex;
+            let pos = 0;
+            for (const column of this.basis) {
+                let replyCounter = 0;
+    
+                for (let row = 0; row < this.size; row++) {
+                    if (this.matrix[row][column] !== 0) {
+                        replyCounter++;
+                    }
+                }
+    
+                if (replyCounter > 1) {
+                    let changeColReply = 0;
+                    for (let row = 0; row < this.size; row++) {
+                        if (this.matrix[row][changeColumnStart] !== 0) {
+                            changeColReply++;
+                        }
+                    }
+                    if (changeColReply === 1) {
+                        this.basis[pos] = changeColumnStart--;
+                    }
+                }
+                pos++;
+            }
+    
+            this._recountIndexString(indexString, vectorB);
         }
 
         ObjVectorB.vectorB = vectorB;
