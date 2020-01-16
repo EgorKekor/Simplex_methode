@@ -54,6 +54,16 @@ const solve = (amount) => {
   Chart.defaults.global.defaultFontFamily = "Lato";
   Chart.defaults.global.defaultFontSize = 18;
 
+  const allColors = [
+    "#FF6384",
+    "#63FF84",
+    "#84FF63",
+    "#8463FF",
+    "#6384FF",
+    "#43434F",
+    "#515151"
+  ];
+
   const Data = {
     labels: (() => {
       const params = new Array;
@@ -71,11 +81,7 @@ const solve = (amount) => {
           }
           return values;
         })(),
-        backgroundColor: [
-          "#FF6384",
-          "#63FF84",
-          "#84FF63",
-        ]
+        backgroundColor: allColors.slice(0, result.size)
       }]
   };
 
